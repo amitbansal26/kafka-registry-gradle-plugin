@@ -14,6 +14,9 @@ import org.gradle.api.tasks.TaskAction;
 import io.confluent.kafka.schemaregistry.client.SchemaMetadata;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 
+/**
+ * 
+ */
 public class SchemaArtifactDownloadTask extends DefaultTask{
 
 	private File outputDir;
@@ -62,7 +65,7 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 	}
 	public void setOutputPath(Property<String> outputPath) {
 		this.outputPath = outputPath;
-		 this.outputDir = new File(this.getProject().getBuildDir(), outputPath.get());
+		 this.outputDir = new File(this.getProject().getBuildDir(), "src/main/avro");
 	}
 	public Property<List<String>> getSubjects() {
 		return subjects;

@@ -5,22 +5,34 @@ import java.util.List;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
 
-import lombok.Data;
-
-@Data
 public class KafkaSchemaRegistryExtension {
 
 	
-	private Property<String> url ;
-	private Property<String> output ;
-	private Property<List<String>> subjects ;
+	 Property<String> url ;
+	 Property<String> output ;
+	 Property<List<String>> subjects ;
 	
 	
 	public KafkaSchemaRegistryExtension(Project project) {
-		super();
 	  this.url = project.getObjects().property(String.class);
 	  this.output = project.getObjects().property(String.class);
 	  this.subjects = project.getObjects().listProperty(String.class);
 	}
 
+
+	public Property<String> getUrl() {
+		return url;
+	}
+
+
+	public Property<String> getOutput() {
+		return output;
+	}
+
+
+	public Property<List<String>> getSubjects() {
+		return subjects;
+	}
+
+	
 }
