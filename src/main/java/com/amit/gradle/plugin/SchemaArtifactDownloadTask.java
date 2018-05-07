@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.provider.ListProperty;
@@ -48,14 +50,12 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 			System.out.println("Inside if condition" + outputFile.getPath());
 			outputFile.getParentFile().mkdirs();
 		}
-
-      PrintWriter printWriter;
-	try {
-		printWriter = new PrintWriter(outputFile);
-		printWriter.write(schemas);
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	}
+        try {
+			Files.write(Paths.get(outputFile.getPath()), schemas.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+   
   }
 	@OutputDirectory
 	public File getOutputDir() {
