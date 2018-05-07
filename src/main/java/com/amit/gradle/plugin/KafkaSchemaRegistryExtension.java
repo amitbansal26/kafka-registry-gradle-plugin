@@ -1,8 +1,7 @@
 package com.amit.gradle.plugin;
 
-import java.util.List;
-
 import org.gradle.api.Project;
+import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 
 public class KafkaSchemaRegistryExtension {
@@ -10,7 +9,7 @@ public class KafkaSchemaRegistryExtension {
 	
 	 Property<String> url ;
 	 Property<String> output ;
-	 Property<List<String>> subjects ;
+	 ListProperty<String> subjects ;
 	
 	
 	public KafkaSchemaRegistryExtension(Project project) {
@@ -30,7 +29,7 @@ public class KafkaSchemaRegistryExtension {
 	}
 
 
-	public Property<List<String>> getSubjects() {
+	public ListProperty<String> getSubjects() {
 		return subjects;
 	}
 

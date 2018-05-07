@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
@@ -21,11 +21,12 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 
 	private File outputDir;
 	private Property<String> outputPath;
-	private Property<List<String>> subjects;
+	private ListProperty<String> subjects;
 	private Property<String> url ;
 	
 	@TaskAction
 	private void downloadSchemas() {
+		System.out.println("***************URL is " + url);
 		subjects.get().forEach(action -> {downloadSchema(url.get(), action);});
 	}
 	
@@ -33,6 +34,7 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		try {
 			SchemaMetadata metadata = RegistryClientSingleton
 					.getInstance().client(url).getLatestSchemaMetadata(subject);
+			System.out.println("Schema Meta Data" + metadata.getSchema());
 			writeSchemas(subject, metadata.getSchema());
 		} catch (IOException | RestClientException e) {
 			e.printStackTrace();
@@ -41,7 +43,9 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 	
 	private void writeSchemas(String subject, String schemas) {
 		File outputFile = new File(outputDir, subject+".avsc");
+		System.out.println("Output file path" + outputFile.getPath());
 		if(!outputFile.getParentFile().exists()) {
+			System.out.println("Inside if condition" + outputFile.getPath());
 			outputFile.getParentFile().mkdirs();
 		}
 
@@ -65,12 +69,12 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 	}
 	public void setOutputPath(Property<String> outputPath) {
 		this.outputPath = outputPath;
-		 this.outputDir = new File(this.getProject().getBuildDir(), "src/main/avro");
+		 this.outputDir = new File(this.getProject().getProjectDir(), "src/main/avro");
 	}
-	public Property<List<String>> getSubjects() {
+	public ListProperty<String> getSubjects() {
 		return subjects;
 	}
-	public void setSubjects(Property<List<String>> subjects) {
+	public void setSubjects(ListProperty<String> subjects) {
 		this.subjects = subjects;
 	}
 	public Property<String> getUrl() {
