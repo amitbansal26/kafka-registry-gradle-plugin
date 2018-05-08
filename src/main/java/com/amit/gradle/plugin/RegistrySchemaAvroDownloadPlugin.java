@@ -13,7 +13,8 @@ public class RegistrySchemaAvroDownloadPlugin implements Plugin<Project>{
 		
 		SchemaArtifactDownloadTask task = project.getTasks()
 		.create("downloadSchemaTask", SchemaArtifactDownloadTask.class);
-		task.setOutputPath(schemaRegistryExtension.getOutput());
+	
+		task.setOutputPath(schemaRegistryExtension.getOutputPath());
 		task.setSubjects(schemaRegistryExtension.getSubjects());
 		task.setUrl(schemaRegistryExtension.getUrl());
 		project.getTasks().forEach(action -> {

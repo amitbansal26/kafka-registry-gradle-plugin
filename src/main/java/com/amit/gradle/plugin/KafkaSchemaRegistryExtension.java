@@ -1,6 +1,7 @@
 package com.amit.gradle.plugin;
 
 import org.gradle.api.Project;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 
@@ -8,13 +9,13 @@ public class KafkaSchemaRegistryExtension {
 
 	
 	 Property<String> url ;
-	 Property<String> output ;
+	 DirectoryProperty outputPath ;
 	 ListProperty<String> subjects ;
 	
 	
 	public KafkaSchemaRegistryExtension(Project project) {
 	  this.url = project.getObjects().property(String.class);
-	  this.output = project.getObjects().property(String.class);
+	  this.outputPath =  project.getLayout().directoryProperty();
 	  this.subjects = project.getObjects().listProperty(String.class);
 	}
 
@@ -24,8 +25,8 @@ public class KafkaSchemaRegistryExtension {
 	}
 
 
-	public Property<String> getOutput() {
-		return output;
+	public DirectoryProperty getOutputPath() {
+		return outputPath;
 	}
 
 

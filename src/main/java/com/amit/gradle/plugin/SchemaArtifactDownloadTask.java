@@ -1,13 +1,12 @@
 package com.amit.gradle.plugin;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.OutputDirectory;
@@ -21,14 +20,13 @@ import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientExcept
  */
 public class SchemaArtifactDownloadTask extends DefaultTask{
 
-	private File outputDir;
-	private Property<String> outputPath;
+	
+	private DirectoryProperty outputPath;
 	private ListProperty<String> subjects;
 	private Property<String> url ;
 	
 	@TaskAction
 	private void downloadSchemas() {
-		System.out.println("***************URL is " + url);
 		subjects.get().forEach(action -> {downloadSchema(url.get(), action);});
 	}
 	
@@ -36,7 +34,6 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		try {
 			SchemaMetadata metadata = RegistryClientSingleton
 					.getInstance().client(url).getLatestSchemaMetadata(subject);
-			System.out.println("Schema Meta Data" + metadata.getSchema());
 			writeSchemas(subject, metadata.getSchema());
 		} catch (IOException | RestClientException e) {
 			e.printStackTrace();
@@ -44,10 +41,8 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 	}
 	
 	private void writeSchemas(String subject, String schemas) {
-		File outputFile = new File(outputDir, subject+".avsc");
-		System.out.println("Output file path" + outputFile.getPath());
+		File outputFile = new File(outputPath.getAsFile().get(), subject+".avsc");
 		if(!outputFile.getParentFile().exists()) {
-			System.out.println("Inside if condition" + outputFile.getPath());
 			outputFile.getParentFile().mkdirs();
 		}
         try {
@@ -57,20 +52,14 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		}
    
   }
+
 	@OutputDirectory
-	public File getOutputDir() {
-		return outputDir;
-	}
-	public void setOutputDir(File outputDir) {
-		this.outputDir = outputDir;
-	}
-	public Property<String> getOutputPath() {
+	public DirectoryProperty getOutputPath() {
 		return outputPath;
 	}
-	public void setOutputPath(Property<String> outputPath) {
+	public void setOutputPath(DirectoryProperty outputPath) {
 		this.outputPath = outputPath;
-		 this.outputDir = new File(this.getProject().getProjectDir(), "src/main/avro");
-	}
+		}
 	public ListProperty<String> getSubjects() {
 		return subjects;
 	}
@@ -78,6 +67,7 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		this.subjects = subjects;
 	}
 	public Property<String> getUrl() {
+		
 		return url;
 	}
 	public void setUrl(Property<String> url) {
