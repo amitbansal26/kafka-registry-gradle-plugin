@@ -8,7 +8,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.gradle.publish:plugin-publish-plugin:0.9.10"
+     classpath "com.gradle.publish:plugin-publish-plugin:0.9.10"
   }
 }
 apply plugin: "com.gradle.plugin-publish"
@@ -30,18 +30,25 @@ apply plugin: "com.gradle.plugin-publish"
    
   }
 
-version = "1.26" 
+version = "1.0"
+description = 'This Plugin downloads avro schemas from kafka Schema Registry'
+
+
 
 pluginBundle {
 	website = 'https://github.com/amitbansal26/kafka-registry-gradle-plugin'
 	vcsUrl = 'https://github.com/amitbansal26/kafka-registry-gradle-plugin'
+	description = 'This Plugin downloads avro schemas from kafka Schema Registry'
+    tags = ['schema-registry', 'kafka', 'avro', 'download']
+    
   plugins { 
+  
       downloadRegistry {  
           id = 'com.amit.plugin.download-registry' 
-          displayName = 'short displayable name for plugin' 
-          description = 'Good human-readable description of what your plugin is about' 
-          tags = ['individual', 'tags', 'per', 'plugin'] 
-
+          displayName = 'Schema Registry Download Plugin' 
+          description = 'This Plugin downloads avro schemas from kafka Schema Registry' 
+		  tags = ['schema-registry', 'kafka', 'avro', 'download']
+		  version = "1.0" 
       }
   }
 }

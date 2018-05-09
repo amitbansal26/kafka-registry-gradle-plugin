@@ -30,9 +30,9 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		subjects.get().forEach(action -> {downloadSchema(url.get(), action);});
 	}
 	
-	private void downloadSchema(String url, String subject) {
+	private void downloadSchema(final String url, final String subject) {
 		try {
-			SchemaMetadata metadata = RegistryClientSingleton
+			final SchemaMetadata metadata = RegistryClientSingleton
 					.getInstance().client(url).getLatestSchemaMetadata(subject);
 			writeSchemas(subject, metadata.getSchema());
 		} catch (IOException | RestClientException e) {
@@ -40,8 +40,8 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		}
 	}
 	
-	private void writeSchemas(String subject, String schemas) {
-		File outputFile = new File(outputPath.getAsFile().get(), subject+".avsc");
+	private void writeSchemas(final String subject, final String schemas) {
+		final File outputFile = new File(outputPath.getAsFile().get(), subject+".avsc");
 		if(!outputFile.getParentFile().exists()) {
 			outputFile.getParentFile().mkdirs();
 		}
@@ -57,13 +57,13 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 	public DirectoryProperty getOutputPath() {
 		return outputPath;
 	}
-	public void setOutputPath(DirectoryProperty outputPath) {
+	public void setOutputPath(final DirectoryProperty outputPath) {
 		this.outputPath = outputPath;
 		}
 	public ListProperty<String> getSubjects() {
 		return subjects;
 	}
-	public void setSubjects(ListProperty<String> subjects) {
+	public void setSubjects(final ListProperty<String> subjects) {
 		this.subjects = subjects;
 	}
 	public Property<String> getUrl() {
