@@ -18,7 +18,7 @@ public class RegistrySchemaAvroDownloadPlugin implements Plugin<Project>{
 		task.setSubjects(schemaRegistryExtension.getSubjects());
 		task.setUrl(schemaRegistryExtension.getUrl());
 		project.getTasks().forEach(action -> {
-			if(action.getName().equals("compileJava")) {
+			if(action.getName().equals("compileJava") || action.getName().equals("generateAvro")) {
 				action.dependsOn(task);
 			}
 		});

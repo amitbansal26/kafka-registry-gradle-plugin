@@ -1,10 +1,12 @@
 package com.amit.gradle.plugin;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
+import org.apache.avro.Schema;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.ListProperty;
@@ -45,9 +47,13 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		if(!outputFile.getParentFile().exists()) {
 			outputFile.getParentFile().mkdirs();
 		}
-        try {
-			Files.write(Paths.get(outputFile.getPath()), schemas.getBytes());
-		} catch (IOException e) {
+	      Schema.Parser parser = new Schema.Parser();
+	      Schema schema = parser.parse(schemas);
+		try (OutputStreamWriter writer = new OutputStreamWriter(
+		          new FileOutputStream(outputFile), StandardCharsets.UTF_8)
+		      ) {
+		        writer.write(schema.toString(true));
+		      } catch (IOException e) {
 			e.printStackTrace();
 		}
    

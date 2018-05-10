@@ -30,7 +30,7 @@ apply plugin: "com.gradle.plugin-publish"
    
   }
 
-version = "1.0"
+version = "1.2"
 description = 'This Plugin downloads avro schemas from kafka Schema Registry'
 
 
@@ -48,7 +48,7 @@ pluginBundle {
           displayName = 'Schema Registry Download Plugin' 
           description = 'This Plugin downloads avro schemas from kafka Schema Registry' 
 		  tags = ['schema-registry', 'kafka', 'avro', 'download']
-		  version = "1.0" 
+		  version = "1.2" 
       }
   }
 }
