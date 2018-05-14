@@ -14,11 +14,14 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
+import groovy.lang.Closure;
 import io.confluent.kafka.schemaregistry.client.SchemaMetadata;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 
 /**
  * 
+ * @author ambansal
+ *
  */
 public class SchemaArtifactDownloadTask extends DefaultTask{
 
@@ -27,6 +30,22 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 	private ListProperty<String> subjects;
 	private Property<String> url ;
 	
+	
+	public SchemaArtifactDownloadTask() {
+		this.getOutputs().upToDateWhen(new Closure(this) {
+			  
+			   @Override
+	            public Object call() {
+	                return false;
+	            }
+
+	            @Override
+	            public Object call(Object arguments) {
+	                return false;
+	            }
+		});
+	}
+
 	@TaskAction
 	private void downloadSchemas() {
 		subjects.get().forEach(action -> {downloadSchema(url.get(), action);});
@@ -44,10 +63,14 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 	
 	private void writeSchemas(final String subject, final String schemas) {
 		final File outputFile = new File(outputPath.getAsFile().get(), subject+".avsc");
+		if(outputFile.getParentFile().exists()) {
+			outputFile.getParentFile().delete();
+		}
+		
 		if(!outputFile.getParentFile().exists()) {
 			outputFile.getParentFile().mkdirs();
 		}
-	      Schema.Parser parser = new Schema.Parser();
+		  Schema.Parser parser = new Schema.Parser();
 	      Schema schema = parser.parse(schemas);
 		try (OutputStreamWriter writer = new OutputStreamWriter(
 		          new FileOutputStream(outputFile), StandardCharsets.UTF_8)
@@ -58,7 +81,6 @@ public class SchemaArtifactDownloadTask extends DefaultTask{
 		}
    
   }
-
 	@OutputDirectory
 	public DirectoryProperty getOutputPath() {
 		return outputPath;
